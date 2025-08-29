@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh, 定时更新
 
 set -e  # 遇到错误立即退出
 
@@ -159,7 +159,7 @@ print_status "缓存清理完成"
 echo ""
 echo -e "${GREEN}🎉 所有应用安装完成！${NC}"
 echo ""
-echo "📋 已安装的应用："
+echo "📋 已安装的应用和配置："
 echo "  • Homebrew (包管理器)"
 echo "  • iTerm2 (终端)"
 echo "  • Arc (浏览器)"
@@ -172,10 +172,60 @@ echo "  • IINA (视频播放器)"
 echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
+echo "  • 定时更新 (每周日凌晨2点自动更新)"
+# 14. 配置定时更新任务
+echo "⏰ 配置 Homebrew 定时更新任务..."
+PLIST_PATH="$HOME/Library/LaunchAgents/com.brew.update.plist"
+SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/brew_update.sh"
+
+# 确保 LaunchAgents 目录存在
+mkdir -p "$HOME/Library/LaunchAgents"
+
+# 创建 launchd plist 文件
+cat > "$PLIST_PATH" << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.brew.update</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$SCRIPT_PATH</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>7</integer>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>$HOME/Library/Logs/brew-update.log</string>
+    <key>StandardErrorPath</key>
+    <string>$HOME/Library/Logs/brew-update.log</string>
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
+EOF
+
+# 加载 launchd 任务
+if launchctl list | grep -q "com.brew.update"; then
+    launchctl unload "$PLIST_PATH" 2>/dev/null
+fi
+
+launchctl load "$PLIST_PATH"
+
+print_status "Homebrew 定时更新任务配置完成 (每周日凌晨2点执行)"
+
 echo ""
 echo "💡 建议："
 echo "  • 重启终端以使所有更改生效"
 echo "  • 首次使用 Cursor 时可能需要登录"
 echo "  • 可以根据需要配置各个应用的偏好设置"
+echo "  • Homebrew 将在每周日凌晨2点自动更新"
 echo ""
 print_status "安装脚本执行完毕！"
