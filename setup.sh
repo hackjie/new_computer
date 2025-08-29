@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh, 定时更新
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh, 定gai
 
 set -e  # 遇到错误立即退出
 
@@ -172,7 +172,7 @@ echo "  • IINA (视频播放器)"
 echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
-echo "  • 定时更新 (每周日凌晨2点自动更新)"
+echo "  • 定时更新 (每天凌晨2点自动更新)"
 # 14. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
 PLIST_PATH="$HOME/Library/LaunchAgents/com.brew.update.plist"
@@ -195,8 +195,6 @@ cat > "$PLIST_PATH" << EOF
     </array>
     <key>StartCalendarInterval</key>
     <dict>
-        <key>Weekday</key>
-        <integer>7</integer>
         <key>Hour</key>
         <integer>2</integer>
         <key>Minute</key>
@@ -219,13 +217,13 @@ fi
 
 launchctl load "$PLIST_PATH"
 
-print_status "Homebrew 定时更新任务配置完成 (每周日凌晨2点执行)"
+print_status "Homebrew 定时更新任务配置完成 (每天凌晨2点执行)"
 
 echo ""
 echo "💡 建议："
 echo "  • 重启终端以使所有更改生效"
 echo "  • 首次使用 Cursor 时可能需要登录"
 echo "  • 可以根据需要配置各个应用的偏好设置"
-echo "  • Homebrew 将在每周日凌晨2点自动更新"
+echo "  • Homebrew 将在每天凌晨2点自动更新"
 echo ""
 print_status "安装脚本执行完毕！"
