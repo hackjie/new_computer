@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA
 
 set -e  # 遇到错误立即退出
 
@@ -114,6 +114,15 @@ else
     print_status "Cursor 已安装，跳过"
 fi
 
+# 10. 安装 IINA 播放器
+echo "🎬 正在安装 IINA 播放器..."
+if ! brew list --cask | grep -q iina; then
+    brew install --cask iina
+    print_status "IINA 播放器安装完成"
+else
+    print_status "IINA 播放器已安装，跳过"
+fi
+
 # 清理 Homebrew 缓存
 echo "🧹 正在清理缓存..."
 brew cleanup
@@ -131,6 +140,7 @@ echo "  • Obsidian (笔记应用)"
 echo "  • Google Chrome (浏览器)"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
+echo "  • IINA (视频播放器)"
 echo ""
 echo "💡 建议："
 echo "  • 重启终端以使所有更改生效"
