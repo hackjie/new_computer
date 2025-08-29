@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh
 
 set -e  # 遇到错误立即退出
 
@@ -123,6 +123,34 @@ else
     print_status "IINA 播放器已安装，跳过"
 fi
 
+# 11. 安装 uv (Python 包管理器)
+echo "🐍 正在安装 uv (Python 包管理器)..."
+if ! command -v uv &> /dev/null; then
+    brew install uv
+    print_status "uv 安装完成"
+else
+    print_status "uv 已安装，跳过"
+fi
+
+# 12. 安装 Node.js
+echo "📦 正在安装 Node.js..."
+if ! command -v node &> /dev/null; then
+    brew install node
+    print_status "Node.js 安装完成"
+else
+    print_status "Node.js 已安装，跳过"
+fi
+
+# 13. 安装 Oh My Zsh
+echo "🔧 正在安装 Oh My Zsh..."
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    # 安装 Oh My Zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    print_status "Oh My Zsh 安装完成"
+else
+    print_status "Oh My Zsh 已安装，跳过"
+fi
+
 # 清理 Homebrew 缓存
 echo "🧹 正在清理缓存..."
 brew cleanup
@@ -141,6 +169,9 @@ echo "  • Google Chrome (浏览器)"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
 echo "  • IINA (视频播放器)"
+echo "  • uv (Python 包管理器)"
+echo "  • Node.js (JavaScript 运行时)"
+echo "  • Oh My Zsh (zsh 配置框架)"
 echo ""
 echo "💡 建议："
 echo "  • 重启终端以使所有更改生效"
