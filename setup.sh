@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh, 定gai
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, uv, Node.js, Oh My Zsh, Folo, 定时更新
 
 set -e  # 遇到错误立即退出
 
@@ -87,7 +87,16 @@ else
     print_status "Obsidian 已安装，跳过"
 fi
 
-# 7. 安装 Google Chrome
+# 7. 安装 Folo
+echo "📰 正在安装 Folo..."
+if ! brew list --cask | grep -q folo; then
+    brew install --cask folo
+    print_status "Folo 安装完成"
+else
+    print_status "Folo 已安装，跳过"
+fi
+
+# 8. 安装 Google Chrome
 echo "🌐 正在安装 Google Chrome..."
 if ! brew list --cask | grep -q google-chrome; then
     brew install --cask google-chrome
@@ -96,7 +105,7 @@ else
     print_status "Google Chrome 已安装，跳过"
 fi
 
-# 8. 安装 Visual Studio Code
+# 9. 安装 Visual Studio Code
 echo "💻 正在安装 Visual Studio Code..."
 if ! brew list --cask | grep -q visual-studio-code; then
     brew install --cask visual-studio-code
@@ -105,7 +114,7 @@ else
     print_status "Visual Studio Code 已安装，跳过"
 fi
 
-# 9. 安装 Cursor
+# 10. 安装 Cursor
 echo "🖱️  正在安装 Cursor..."
 if ! brew list --cask | grep -q cursor; then
     brew install --cask cursor
@@ -114,7 +123,7 @@ else
     print_status "Cursor 已安装，跳过"
 fi
 
-# 10. 安装 IINA 播放器
+# 11. 安装 IINA 播放器
 echo "🎬 正在安装 IINA 播放器..."
 if ! brew list --cask | grep -q iina; then
     brew install --cask iina
@@ -123,7 +132,7 @@ else
     print_status "IINA 播放器已安装，跳过"
 fi
 
-# 11. 安装 uv (Python 包管理器)
+# 12. 安装 uv (Python 包管理器)
 echo "🐍 正在安装 uv (Python 包管理器)..."
 if ! command -v uv &> /dev/null; then
     brew install uv
@@ -132,7 +141,7 @@ else
     print_status "uv 已安装，跳过"
 fi
 
-# 12. 安装 Node.js
+# 13. 安装 Node.js
 echo "📦 正在安装 Node.js..."
 if ! command -v node &> /dev/null; then
     brew install node
@@ -141,7 +150,7 @@ else
     print_status "Node.js 已安装，跳过"
 fi
 
-# 13. 安装 Oh My Zsh
+# 14. 安装 Oh My Zsh
 echo "🔧 正在安装 Oh My Zsh..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     # 安装 Oh My Zsh
@@ -165,6 +174,7 @@ echo "  • iTerm2 (终端)"
 echo "  • Arc (浏览器)"
 echo "  • Raycast (启动器)"
 echo "  • Obsidian (笔记应用)"
+echo "  • Folo (信息浏览器)"
 echo "  • Google Chrome (浏览器)"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
@@ -173,7 +183,7 @@ echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
 echo "  • 定时更新 (每天凌晨2点自动更新)"
-# 14. 配置定时更新任务
+# 15. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
 PLIST_PATH="$HOME/Library/LaunchAgents/com.brew.update.plist"
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/brew_update.sh"
