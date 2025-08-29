@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, IINA, 网易云音乐, uv, Node.js, Oh My Zsh, Folo, 定时更新
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, ChatWise, IINA, 网易云音乐, uv, Node.js, Oh My Zsh, Folo, 定时更新
 
 set -e  # 遇到错误立即退出
 
@@ -123,7 +123,16 @@ else
     print_status "Cursor 已安装，跳过"
 fi
 
-# 11. 安装 IINA 播放器
+# 11. 安装 ChatWise
+echo "🤖 正在安装 ChatWise..."
+if ! brew list --cask | grep -q chatwise; then
+    brew install --cask chatwise
+    print_status "ChatWise 安装完成"
+else
+    print_status "ChatWise 已安装，跳过"
+fi
+
+# 12. 安装 IINA 播放器
 echo "🎬 正在安装 IINA 播放器..."
 if ! brew list --cask | grep -q iina; then
     brew install --cask iina
@@ -132,7 +141,7 @@ else
     print_status "IINA 播放器已安装，跳过"
 fi
 
-# 12. 安装 网易云音乐
+# 13. 安装 网易云音乐
 echo "🎵 正在安装 网易云音乐..."
 if ! brew list --cask | grep -q neteasemusic; then
     brew install --cask neteasemusic
@@ -141,7 +150,7 @@ else
     print_status "网易云音乐已安装，跳过"
 fi
 
-# 13. 安装 uv (Python 包管理器)
+# 14. 安装 uv (Python 包管理器)
 echo "🐍 正在安装 uv (Python 包管理器)..."
 if ! command -v uv &> /dev/null; then
     brew install uv
@@ -150,7 +159,7 @@ else
     print_status "uv 已安装，跳过"
 fi
 
-# 14. 安装 Node.js
+# 15. 安装 Node.js
 echo "📦 正在安装 Node.js..."
 if ! command -v node &> /dev/null; then
     brew install node
@@ -159,7 +168,7 @@ else
     print_status "Node.js 已安装，跳过"
 fi
 
-# 15. 安装 Oh My Zsh
+# 16. 安装 Oh My Zsh
 echo "🔧 正在安装 Oh My Zsh..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     # 安装 Oh My Zsh
@@ -187,13 +196,14 @@ echo "  • Folo (信息浏览器)"
 echo "  • Google Chrome (浏览器)"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
+echo "  • ChatWise (AI 聊天机器人)"
 echo "  • IINA (视频播放器)"
 echo "  • 网易云音乐 (音乐播放器)"
 echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
 echo "  • 定时更新 (每天凌晨2点自动更新)"
-# 16. 配置定时更新任务
+# 17. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
 PLIST_PATH="$HOME/Library/LaunchAgents/com.brew.update.plist"
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/brew_update.sh"
