@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 霞鹜文楷字体, 定时更新脚本
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, 定时更新脚本
 
 set -e  # 遇到错误立即退出
 
@@ -214,7 +214,16 @@ else
     print_status "霞鹜文楷字体已安装，跳过"
 fi
 
-# 21. 清理 Homebrew 缓存
+# 21. 安装 Spokenly (语音转文字AI工具)
+echo "🎙️  正在安装 Spokenly..."
+if ! mas list | grep -q "6740315592"; then
+    mas install 6740315592
+    print_status "Spokenly 安装完成"
+else
+    print_status "Spokenly 已安装，跳过"
+fi
+
+# 22. 清理 Homebrew 缓存
 echo "🧹 正在清理缓存..."
 brew cleanup
 print_status "缓存清理完成"
@@ -242,8 +251,9 @@ echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
 echo "  • 霞鹜文楷字体 (开源中文字体)"
+echo "  • Spokenly (语音转文字AI工具)"
 echo "  • 定时更新脚本 (每天凌晨2点自动更新)"
-# 22. 创建定时更新脚本
+# 23. 创建定时更新脚本
 echo "📝 创建 Homebrew 定时更新脚本..."
 SCRIPT_DIR="$HOME/.sh"
 SCRIPT_PATH="$SCRIPT_DIR/brew_update.sh"
@@ -333,7 +343,7 @@ BREW_EOF
 chmod +x "$SCRIPT_PATH"
 print_status "Homebrew 定时更新脚本创建完成 ($SCRIPT_PATH)"
 
-# 23. 配置定时更新任务
+# 24. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
 
 # 定义PLIST路径
