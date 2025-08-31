@@ -3,7 +3,7 @@
 # macOS 开发环境一键安装脚本
 # 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, 定时更新脚本
 
-set -e  # 遇到错误立即退出
+# 移除 set -e，让脚本在遇到错误时继续执行而不是退出
 
 echo "🚀 开始安装 macOS 开发环境..."
 
@@ -32,201 +32,171 @@ print_error() {
     echo -e "${RED}❌ $1${NC}"
 }
 
+# 执行命令并处理错误
+run_command() {
+    local description="$1"
+    shift
+    echo "🔄 $description..."
+
+    if "$@"; then
+        print_status "$description 完成"
+        return 0
+    else
+        print_warning "$description 失败，继续执行..."
+        return 1
+    fi
+}
+
 # 1. 安装 Homebrew
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
-    echo "🔄 正在安装 Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # 添加 Homebrew 到 PATH
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    print_status "Homebrew 安装完成"
+    if run_command "安装 Homebrew" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+        # 添加 Homebrew 到 PATH
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
 else
     print_status "Homebrew 已安装，跳过"
 fi
 
 # 2. 更新 Homebrew
-echo "🔄 正在更新 Homebrew..."
-brew update
-print_status "Homebrew 更新完成"
+run_command "更新 Homebrew" brew update
 
 # 3. 安装 iTerm2
-echo "🖥️  正在安装 iTerm2..."
-if ! brew list --cask | grep -q iterm2; then
-    brew install --cask iterm2
-    print_status "iTerm2 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q iterm2; then
+    run_command "安装 iTerm2" brew install --cask iterm2
 else
     print_status "iTerm2 已安装，跳过"
 fi
 
 # 4. 安装 Arc 浏览器
-echo "🌐 正在安装 Arc 浏览器..."
-if ! brew list --cask | grep -q arc; then
-    brew install --cask arc
-    print_status "Arc 浏览器安装完成"
+if ! brew list --cask 2>/dev/null | grep -q arc; then
+    run_command "安装 Arc 浏览器" brew install --cask arc
 else
     print_status "Arc 浏览器已安装，跳过"
 fi
 
 # 5. 安装 Raycast
-echo "🔍 正在安装 Raycast..."
-if ! brew list --cask | grep -q raycast; then
-    brew install --cask raycast
-    print_status "Raycast 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q raycast; then
+    run_command "安装 Raycast" brew install --cask raycast
 else
     print_status "Raycast 已安装，跳过"
 fi
 
 # 6. 安装 Notion
-echo "📝 正在安装 Notion..."
-if ! brew list --cask | grep -q notion; then
-    brew install --cask notion
-    print_status "Notion 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q notion; then
+    run_command "安装 Notion" brew install --cask notion
 else
     print_status "Notion 已安装，跳过"
 fi
 
 # 7. 安装 Obsidian
-echo "📝 正在安装 Obsidian..."
-if ! brew list --cask | grep -q obsidian; then
-    brew install --cask obsidian
-    print_status "Obsidian 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q obsidian; then
+    run_command "安装 Obsidian" brew install --cask obsidian
 else
     print_status "Obsidian 已安装，跳过"
 fi
 
 # 8. 安装 Folo
-echo "📰 正在安装 Folo..."
-if ! brew list --cask | grep -q folo; then
-    brew install --cask folo
-    print_status "Folo 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q folo; then
+    run_command "安装 Folo" brew install --cask folo
 else
     print_status "Folo 已安装，跳过"
 fi
 
 # 9. 安装 Google Chrome
-echo "🌐 正在安装 Google Chrome..."
-if ! brew list --cask | grep -q google-chrome; then
-    brew install --cask google-chrome
-    print_status "Google Chrome 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q google-chrome; then
+    run_command "安装 Google Chrome" brew install --cask google-chrome
 else
     print_status "Google Chrome 已安装，跳过"
 fi
 
 # 10. 安装 Visual Studio Code
-echo "💻 正在安装 Visual Studio Code..."
-if ! brew list --cask | grep -q visual-studio-code; then
-    brew install --cask visual-studio-code
-    print_status "Visual Studio Code 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q visual-studio-code; then
+    run_command "安装 Visual Studio Code" brew install --cask visual-studio-code
 else
     print_status "Visual Studio Code 已安装，跳过"
 fi
 
 # 11. 安装 Cursor
-echo "🖱️  正在安装 Cursor..."
-if ! brew list --cask | grep -q cursor; then
-    brew install --cask cursor
-    print_status "Cursor 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q cursor; then
+    run_command "安装 Cursor" brew install --cask cursor
 else
     print_status "Cursor 已安装，跳过"
 fi
 
 # 12. 安装 Zed
-echo "⚡ 正在安装 Zed..."
-if ! brew list --cask | grep -q zed; then
-    brew install --cask zed
-    print_status "Zed 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q zed; then
+    run_command "安装 Zed" brew install --cask zed
 else
     print_status "Zed 已安装，跳过"
 fi
 
 # 13. 安装 ChatWise
-echo "🤖 正在安装 ChatWise..."
-if ! brew list --cask | grep -q chatwise; then
-    brew install --cask chatwise
-    print_status "ChatWise 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q chatwise; then
+    run_command "安装 ChatWise" brew install --cask chatwise
 else
     print_status "ChatWise 已安装，跳过"
 fi
 
 # 14. 安装 IINA 播放器
-echo "🎬 正在安装 IINA 播放器..."
-if ! brew list --cask | grep -q iina; then
-    brew install --cask iina
-    print_status "IINA 播放器安装完成"
+if ! brew list --cask 2>/dev/null | grep -q iina; then
+    run_command "安装 IINA 播放器" brew install --cask iina
 else
     print_status "IINA 播放器已安装，跳过"
 fi
 
 # 15. 安装 网易云音乐
-echo "🎵 正在安装 网易云音乐..."
-if ! brew list --cask | grep -q neteasemusic; then
-    brew install --cask neteasemusic
-    print_status "网易云音乐安装完成"
+if ! brew list --cask 2>/dev/null | grep -q neteasemusic; then
+    run_command "安装 网易云音乐" brew install --cask neteasemusic
 else
     print_status "网易云音乐已安装，跳过"
 fi
 
 # 16. 安装 MacWhisper
-echo "🎙️  正在安装 MacWhisper..."
-if ! brew list --cask | grep -q macwhisper; then
-    brew install --cask macwhisper
-    print_status "MacWhisper 安装完成"
+if ! brew list --cask 2>/dev/null | grep -q macwhisper; then
+    run_command "安装 MacWhisper" brew install --cask macwhisper
 else
     print_status "MacWhisper 已安装，跳过"
 fi
 
 # 17. 安装 uv (Python 包管理器)
-echo "🐍 正在安装 uv (Python 包管理器)..."
 if ! command -v uv &> /dev/null; then
-    brew install uv
-    print_status "uv 安装完成"
+    run_command "安装 uv (Python 包管理器)" brew install uv
 else
     print_status "uv 已安装，跳过"
 fi
 
 # 18. 安装 Node.js
-echo "📦 正在安装 Node.js..."
 if ! command -v node &> /dev/null; then
-    brew install node
-    print_status "Node.js 安装完成"
+    run_command "安装 Node.js" brew install node
 else
     print_status "Node.js 已安装，跳过"
 fi
 
 # 19. 安装 Oh My Zsh
-echo "🔧 正在安装 Oh My Zsh..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    # 安装 Oh My Zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    print_status "Oh My Zsh 安装完成"
+    run_command "安装 Oh My Zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
     print_status "Oh My Zsh 已安装，跳过"
 fi
 
 # 20. 安装霞鹜文楷字体
-echo "✍️  正在安装霞鹜文楷字体..."
-if ! brew list --cask | grep -q font-lxgw-wenkai; then
-    brew install --cask font-lxgw-wenkai
-    print_status "霞鹜文楷字体安装完成"
+if ! brew list --cask 2>/dev/null | grep -q font-lxgw-wenkai; then
+    run_command "安装霞鹜文楷字体" brew install --cask font-lxgw-wenkai
 else
     print_status "霞鹜文楷字体已安装，跳过"
 fi
 
 # 21. 安装 Spokenly (语音转文字AI工具)
-echo "🎙️  正在安装 Spokenly..."
-if ! mas list | grep -q "6740315592"; then
-    mas install 6740315592
-    print_status "Spokenly 安装完成"
+if ! mas list 2>/dev/null | grep -q "6740315592"; then
+    run_command "安装 Spokenly" mas install 6740315592
 else
     print_status "Spokenly 已安装，跳过"
 fi
 
 # 22. 清理 Homebrew 缓存
-echo "🧹 正在清理缓存..."
-brew cleanup
-print_status "缓存清理完成"
+run_command "清理 Homebrew 缓存" brew cleanup
 
 echo ""
 echo -e "${GREEN}🎉 所有应用安装完成！${NC}"
@@ -340,8 +310,7 @@ echo "----------------------------------------" >> "$LOG_FILE"
 BREW_EOF
 
 # 给脚本添加执行权限
-chmod +x "$SCRIPT_PATH"
-print_status "Homebrew 定时更新脚本创建完成 ($SCRIPT_PATH)"
+run_command "设置脚本执行权限" chmod +x "$SCRIPT_PATH"
 
 # 24. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
@@ -382,13 +351,13 @@ cat > "$PLIST_PATH" << EOF
 EOF
 
 # 加载 launchd 任务
-if launchctl list | grep -q "com.brew.update"; then
-    launchctl unload "$PLIST_PATH" 2>/dev/null
+if run_command "卸载现有定时任务" launchctl list | grep -q "com.brew.update" && launchctl unload "$PLIST_PATH" 2>/dev/null; then
+    echo "已卸载现有定时任务"
 fi
 
-launchctl load "$PLIST_PATH"
-
-print_status "Homebrew 定时更新任务配置完成 (每天凌晨2点执行)"
+if run_command "加载新的定时任务" launchctl load "$PLIST_PATH"; then
+    print_status "Homebrew 定时更新任务配置完成 (每天凌晨2点执行)"
+fi
 
 echo ""
 echo "💡 建议："
