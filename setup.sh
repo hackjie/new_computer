@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 定时更新脚本
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 定时更新脚本
 
 set -e  # 遇到错误立即退出
 
@@ -132,7 +132,16 @@ else
     print_status "Cursor 已安装，跳过"
 fi
 
-# 12. 安装 ChatWise
+# 12. 安装 Zed
+echo "⚡ 正在安装 Zed..."
+if ! brew list --cask | grep -q zed; then
+    brew install --cask zed
+    print_status "Zed 安装完成"
+else
+    print_status "Zed 已安装，跳过"
+fi
+
+# 13. 安装 ChatWise
 echo "🤖 正在安装 ChatWise..."
 if ! brew list --cask | grep -q chatwise; then
     brew install --cask chatwise
@@ -141,7 +150,7 @@ else
     print_status "ChatWise 已安装，跳过"
 fi
 
-# 13. 安装 IINA 播放器
+# 14. 安装 IINA 播放器
 echo "🎬 正在安装 IINA 播放器..."
 if ! brew list --cask | grep -q iina; then
     brew install --cask iina
@@ -150,7 +159,7 @@ else
     print_status "IINA 播放器已安装，跳过"
 fi
 
-# 14. 安装 网易云音乐
+# 15. 安装 网易云音乐
 echo "🎵 正在安装 网易云音乐..."
 if ! brew list --cask | grep -q neteasemusic; then
     brew install --cask neteasemusic
@@ -159,7 +168,7 @@ else
     print_status "网易云音乐已安装，跳过"
 fi
 
-# 15. 安装 MacWhisper
+# 16. 安装 MacWhisper
 echo "🎙️  正在安装 MacWhisper..."
 if ! brew list --cask | grep -q macwhisper; then
     brew install --cask macwhisper
@@ -168,7 +177,7 @@ else
     print_status "MacWhisper 已安装，跳过"
 fi
 
-# 16. 安装 uv (Python 包管理器)
+# 17. 安装 uv (Python 包管理器)
 echo "🐍 正在安装 uv (Python 包管理器)..."
 if ! command -v uv &> /dev/null; then
     brew install uv
@@ -177,7 +186,7 @@ else
     print_status "uv 已安装，跳过"
 fi
 
-# 17. 安装 Node.js
+# 18. 安装 Node.js
 echo "📦 正在安装 Node.js..."
 if ! command -v node &> /dev/null; then
     brew install node
@@ -186,7 +195,7 @@ else
     print_status "Node.js 已安装，跳过"
 fi
 
-# 18. 安装 Oh My Zsh
+# 19. 安装 Oh My Zsh
 echo "🔧 正在安装 Oh My Zsh..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     # 安装 Oh My Zsh
@@ -215,6 +224,7 @@ echo "  • Folo (信息浏览器)"
 echo "  • Google Chrome (浏览器)"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
+echo "  • Zed (高性能代码编辑器)"
 echo "  • ChatWise (AI 聊天机器人)"
 echo "  • IINA (视频播放器)"
 echo "  • 网易云音乐 (音乐播放器)"
@@ -223,7 +233,7 @@ echo "  • uv (Python 包管理器)"
 echo "  • Node.js (JavaScript 运行时)"
 echo "  • Oh My Zsh (zsh 配置框架)"
 echo "  • 定时更新脚本 (每天凌晨2点自动更新)"
-# 19. 创建定时更新脚本
+# 20. 创建定时更新脚本
 echo "📝 创建 Homebrew 定时更新脚本..."
 SCRIPT_DIR="$HOME/.sh"
 SCRIPT_PATH="$SCRIPT_DIR/brew_update.sh"
@@ -313,7 +323,7 @@ BREW_EOF
 chmod +x "$SCRIPT_PATH"
 print_status "Homebrew 定时更新脚本创建完成 ($SCRIPT_PATH)"
 
-# 20. 配置定时更新任务
+# 21. 配置定时更新任务
 echo "⏰ 配置 Homebrew 定时更新任务..."
 
 # 定义PLIST路径
