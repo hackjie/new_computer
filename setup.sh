@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, MacWhisper, uv, Node.js, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, 定时更新脚本
+# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, uv, pnpm, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, 定时更新脚本
 
 # 移除 set -e，让脚本在遇到错误时继续执行而不是退出
 
@@ -47,6 +47,10 @@ run_command() {
     fi
 }
 
+# ===============================
+# 基础工具安装
+# ===============================
+
 # 1. 安装 Homebrew
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
@@ -62,12 +66,20 @@ fi
 # 2. 更新 Homebrew
 run_command "更新 Homebrew" brew update
 
+# ===============================
+# 终端工具
+# ===============================
+
 # 3. 安装 iTerm2
 if ! brew list --cask 2>/dev/null | grep -q iterm2; then
     run_command "安装 iTerm2" brew install --cask iterm2
 else
     print_status "iTerm2 已安装，跳过"
 fi
+
+# ===============================
+# 浏览器
+# ===============================
 
 # 4. 安装 Arc 浏览器
 if ! brew list --cask 2>/dev/null | grep -q arc; then
@@ -76,68 +88,88 @@ else
     print_status "Arc 浏览器已安装，跳过"
 fi
 
-# 5. 安装 Raycast
-if ! brew list --cask 2>/dev/null | grep -q raycast; then
-    run_command "安装 Raycast" brew install --cask raycast
-else
-    print_status "Raycast 已安装，跳过"
-fi
-
-# 6. 安装 Notion
-if ! brew list --cask 2>/dev/null | grep -q notion; then
-    run_command "安装 Notion" brew install --cask notion
-else
-    print_status "Notion 已安装，跳过"
-fi
-
-# 7. 安装 Obsidian
-if ! brew list --cask 2>/dev/null | grep -q obsidian; then
-    run_command "安装 Obsidian" brew install --cask obsidian
-else
-    print_status "Obsidian 已安装，跳过"
-fi
-
-# 8. 安装 Folo
-if ! brew list --cask 2>/dev/null | grep -q folo; then
-    run_command "安装 Folo" brew install --cask folo
-else
-    print_status "Folo 已安装，跳过"
-fi
-
-# 9. 安装 Google Chrome
+# 5. 安装 Google Chrome
 if ! brew list --cask 2>/dev/null | grep -q google-chrome; then
     run_command "安装 Google Chrome" brew install --cask google-chrome
 else
     print_status "Google Chrome 已安装，跳过"
 fi
 
-# 10. 安装 Visual Studio Code
+# ===============================
+# 生产力工具
+# ===============================
+
+# 6. 安装 Raycast
+if ! brew list --cask 2>/dev/null | grep -q raycast; then
+    run_command "安装 Raycast" brew install --cask raycast
+else
+    print_status "Raycast 已安装，跳过"
+fi
+
+# 7. 安装 Folo
+if ! brew list --cask 2>/dev/null | grep -q folo; then
+    run_command "安装 Folo" brew install --cask folo
+else
+    print_status "Folo 已安装，跳过"
+fi
+
+# ===============================
+# 笔记和知识管理
+# ===============================
+
+# 8. 安装 Obsidian
+if ! brew list --cask 2>/dev/null | grep -q obsidian; then
+    run_command "安装 Obsidian" brew install --cask obsidian
+else
+    print_status "Obsidian 已安装，跳过"
+fi
+
+# ===============================
+# 开发工具
+# ===============================
+
+# 9. 安装 Visual Studio Code
 if ! brew list --cask 2>/dev/null | grep -q visual-studio-code; then
     run_command "安装 Visual Studio Code" brew install --cask visual-studio-code
 else
     print_status "Visual Studio Code 已安装，跳过"
 fi
 
-# 11. 安装 Cursor
+# 10. 安装 Cursor
 if ! brew list --cask 2>/dev/null | grep -q cursor; then
     run_command "安装 Cursor" brew install --cask cursor
 else
     print_status "Cursor 已安装，跳过"
 fi
 
-# 12. 安装 Zed
+# 11. 安装 Zed
 if ! brew list --cask 2>/dev/null | grep -q zed; then
     run_command "安装 Zed" brew install --cask zed
 else
     print_status "Zed 已安装，跳过"
 fi
 
-# 13. 安装 ChatWise
+# ===============================
+# AI工具
+# ===============================
+
+# 12. 安装 ChatWise
 if ! brew list --cask 2>/dev/null | grep -q chatwise; then
     run_command "安装 ChatWise" brew install --cask chatwise
 else
     print_status "ChatWise 已安装，跳过"
 fi
+
+# 13. 安装 Spokenly (语音转文字AI工具)
+if ! mas list 2>/dev/null | grep -q "6740315592"; then
+    run_command "安装 Spokenly" mas install 6740315592
+else
+    print_status "Spokenly 已安装，跳过"
+fi
+
+# ===============================
+# 媒体工具
+# ===============================
 
 # 14. 安装 IINA 播放器
 if ! brew list --cask 2>/dev/null | grep -q iina; then
@@ -153,76 +185,101 @@ else
     print_status "网易云音乐已安装，跳过"
 fi
 
-# 16. 安装 MacWhisper
-if ! brew list --cask 2>/dev/null | grep -q macwhisper; then
-    run_command "安装 MacWhisper" brew install --cask macwhisper
-else
-    print_status "MacWhisper 已安装，跳过"
-fi
+# ===============================
+# 开发环境和包管理器
+# ===============================
 
-# 17. 安装 uv (Python 包管理器)
+# 16. 安装 uv (Python 包管理器)
 if ! command -v uv &> /dev/null; then
     run_command "安装 uv (Python 包管理器)" brew install uv
 else
     print_status "uv 已安装，跳过"
 fi
 
-# 18. 安装 Node.js
-if ! command -v node &> /dev/null; then
-    run_command "安装 Node.js" brew install node
+# 17. 安装 pnpm (Node.js 包管理器)
+if ! command -v pnpm &> /dev/null; then
+    run_command "安装 pnpm (Node.js 包管理器)" brew install pnpm
 else
-    print_status "Node.js 已安装，跳过"
+    print_status "pnpm 已安装，跳过"
 fi
 
-# 19. 安装 Oh My Zsh
+# ===============================
+# Shell 增强
+# ===============================
+
+# 18. 安装 Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     run_command "安装 Oh My Zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
     print_status "Oh My Zsh 已安装，跳过"
 fi
 
-# 20. 安装霞鹜文楷字体
+# ===============================
+# 字体
+# ===============================
+
+# 19. 安装霞鹜文楷字体
 if ! brew list --cask 2>/dev/null | grep -q font-lxgw-wenkai; then
     run_command "安装霞鹜文楷字体" brew install --cask font-lxgw-wenkai
 else
     print_status "霞鹜文楷字体已安装，跳过"
 fi
 
-# 21. 安装 Spokenly (语音转文字AI工具)
-if ! mas list 2>/dev/null | grep -q "6740315592"; then
-    run_command "安装 Spokenly" mas install 6740315592
-else
-    print_status "Spokenly 已安装，跳过"
-fi
+# ===============================
+# 清理
+# ===============================
 
-# 22. 清理 Homebrew 缓存
+# 20. 清理 Homebrew 缓存
 run_command "清理 Homebrew 缓存" brew cleanup
 
 echo ""
 echo -e "${GREEN}🎉 所有应用安装完成！${NC}"
 echo ""
 echo "📋 已安装的应用和配置："
+echo ""
+echo "📦 基础工具:"
 echo "  • Homebrew (包管理器)"
+echo ""
+echo "🖥️ 终端工具:"
 echo "  • iTerm2 (终端)"
+echo ""
+echo "🌐 浏览器:"
 echo "  • Arc (浏览器)"
-echo "  • Raycast (启动器)"
-echo "  • Notion (笔记应用)"
-echo "  • Obsidian (笔记应用)"
-echo "  • Folo (信息浏览器)"
 echo "  • Google Chrome (浏览器)"
+echo ""
+echo "🔍 生产力工具:"
+echo "  • Raycast (启动器)"
+echo "  • Folo (信息浏览器)"
+echo ""
+echo "📝 笔记和知识管理:"
+echo "  • Obsidian (笔记应用)"
+echo ""
+echo "💻 开发工具:"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
 echo "  • Zed (高性能代码编辑器)"
+echo ""
+echo "🤖 AI工具:"
 echo "  • ChatWise (AI 聊天机器人)"
+echo "  • Spokenly (语音转文字AI工具)"
+echo ""
+echo "🎬 媒体工具:"
 echo "  • IINA (视频播放器)"
 echo "  • 网易云音乐 (音乐播放器)"
-echo "  • MacWhisper (语音转文字工具)"
+echo ""
+echo "🔧 开发环境:"
 echo "  • uv (Python 包管理器)"
-echo "  • Node.js (JavaScript 运行时)"
+echo "  • pnpm (Node.js 包管理器)"
+echo ""
+echo "🐚 Shell增强:"
 echo "  • Oh My Zsh (zsh 配置框架)"
+echo ""
+echo "🔤 字体:"
 echo "  • 霞鹜文楷字体 (开源中文字体)"
-echo "  • Spokenly (语音转文字AI工具)"
+echo ""
+echo "⏰ 自动化:"
 echo "  • 定时更新脚本 (每天凌晨2点自动更新)"
+
 # 23. 创建定时更新脚本
 echo "📝 创建 Homebrew 定时更新脚本..."
 SCRIPT_DIR="$HOME/.sh"

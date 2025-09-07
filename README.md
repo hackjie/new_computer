@@ -8,14 +8,18 @@
 - **包管理器**: Homebrew (macOS包管理器)
 - **终端工具**: iTerm2 (高级终端应用)
 - **浏览器**: Arc, Google Chrome (现代浏览器)
-- **生产力工具**: Raycast (强大的启动器), Obsidian (笔记应用)
+- **生产力工具**: Raycast (强大的启动器), Folo (信息浏览器)
+- **笔记工具**: Obsidian (知识管理工具)
 - **开发工具**:
   - Visual Studio Code (代码编辑器)
   - Cursor (AI辅助代码编辑器)
+  - Zed (高性能代码编辑器)
   - uv (Python包管理器)
-  - Node.js (JavaScript运行时)
-- **媒体工具**: IINA (视频播放器)
+  - pnpm (Node.js包管理器)
+- **AI工具**: ChatWise (AI聊天机器人), Spokenly (语音转文字AI工具)
+- **媒体工具**: IINA (视频播放器), 网易云音乐 (音乐播放器)
 - **Shell增强**: Oh My Zsh (zsh配置框架)
+- **字体**: 霞鹜文楷字体 (开源中文字体)
 - **自动化维护**: 定时更新功能
 
 ### 🤖 智能特性
@@ -53,12 +57,14 @@ curl -fsSL https://raw.githubusercontent.com/lishouxian/new_computer/main/setup.
 | 📦 包管理 | Homebrew | macOS包管理器 |
 | 🖥️ 终端 | iTerm2 | 高级终端应用 |
 | 🌐 浏览器 | Arc, Chrome | 现代浏览器 |
-| 🔍 生产力 | Raycast | 强大的启动器 |
+| 🔍 生产力 | Raycast, Folo | 启动器和信息工具 |
 | 📝 笔记 | Obsidian | 知识管理工具 |
-| 💻 编辑器 | VS Code, Cursor | 代码编辑器 |
+| 💻 编辑器 | VS Code, Cursor, Zed | 代码编辑器 |
+| 🤖 AI工具 | ChatWise, Spokenly | AI聊天和语音转文字 |
 | 🐍 Python | uv | 现代化Python包管理器 |
-| 📦 JavaScript | Node.js | JavaScript运行时 |
-| 🎬 媒体 | IINA | 视频播放器 |
+| 📦 JavaScript | pnpm | Node.js包管理器 |
+| 🎬 媒体 | IINA, 网易云音乐 | 视频和音乐播放器 |
+| 🔤 字体 | 霞鹜文楷 | 开源中文字体 |
 | 🔧 Shell | Oh My Zsh | zsh配置框架 |
 | ⏰ 自动化 | 定时更新 | 自动维护脚本 |
 
