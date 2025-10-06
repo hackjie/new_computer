@@ -315,6 +315,13 @@ fi
 
 log_message "🚀 开始自动更新 Homebrew 和应用..."
 
+# 设置 Homebrew 环境变量
+if [ -f "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -f "/usr/local/bin/brew" ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # 检查 Homebrew 是否已安装
 if ! command -v brew &> /dev/null; then
     log_message "❌ Homebrew 未安装，跳过更新"
