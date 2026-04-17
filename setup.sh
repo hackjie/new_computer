@@ -54,11 +54,12 @@ run_command() {
 # 1. 安装 Homebrew（使用国内镜像源）
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
-    echo "🔄 使用 USTC 中科大镜像安装 Homebrew（全程无交互、无 Gitee 排队）..."
-    export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.ustc.edu.cn/brew.git
-    export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.ustc.edu.cn/homebrew-core.git
-    export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
-    if /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"; then
+    echo "🔄 使用清华 TUNA 镜像安装 Homebrew（全程无交互、无排队）..."
+    export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+    export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+    export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
+    export HOMEBREW_API_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api
+    if /bin/bash -c "$(curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install/raw/HEAD/install.sh)"; then
         if [ -f "/opt/homebrew/bin/brew" ]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
         elif [ -f "/usr/local/bin/brew" ]; then
