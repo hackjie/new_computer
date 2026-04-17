@@ -71,6 +71,11 @@ else
     print_status "Homebrew 已安装，跳过"
 fi
 
+# 确保当前 shell 能正确解析 brew 路径（新终端一般已在 PATH，此处兜底）
+if command -v brew &> /dev/null; then
+    eval "$(brew shellenv)" 2>/dev/null || true
+fi
+
 # 2. 配置 Homebrew 阿里巴巴国内镜像源
 echo "🔄 配置 Homebrew 阿里巴巴国内镜像源..."
 BREW_MIRROR_PROFILE="${HOME}/.zprofile"
@@ -90,6 +95,24 @@ echo 'export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple' >> "$
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles
 export HOMEBREW_API_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles/api
 export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple
+
+# Git 远程改为阿里源：加速 brew update（拉取 brew、core、cask 公式库）
+# 说明：仅设置 BOTTLE/API 环境变量不会改 git origin；不执行则 update 仍走 GitHub
+if command -v brew &> /dev/null; then
+    BREW_GIT_DIR="$(brew --repo 2>/dev/null)"
+    if [ -n "$BREW_GIT_DIR" ] && [ -d "$BREW_GIT_DIR/.git" ]; then
+        run_command "将 brew.git 远程设为阿里源" git -C "$BREW_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
+    fi
+    CORE_GIT_DIR="$(brew --repo homebrew/core 2>/dev/null)"
+    if [ -n "$CORE_GIT_DIR" ] && [ -d "$CORE_GIT_DIR/.git" ]; then
+        run_command "将 homebrew-core 远程设为阿里源" git -C "$CORE_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-core.git
+    fi
+    CASK_GIT_DIR="$(brew --repo homebrew/cask 2>/dev/null)"
+    if [ -n "$CASK_GIT_DIR" ] && [ -d "$CASK_GIT_DIR/.git" ]; then
+        run_command "将 homebrew-cask 远程设为阿里源" git -C "$CASK_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-cask.git
+    fi
+fi
+
 print_status "阿里巴巴镜像源配置完成"
 
 # 3. 更新 Homebrew
