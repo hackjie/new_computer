@@ -46,12 +46,6 @@ cd new_computer
 ./setup.sh
 ```
 
-### 方式二：直接下载运行
-```bash
-# 下载并运行
-curl -fsSL https://raw.githubusercontent.com/lishouxian/new_computer/main/setup.sh | bash
-```
-
 ## 📋 安装清单
 
 运行脚本后将安装以下应用：
