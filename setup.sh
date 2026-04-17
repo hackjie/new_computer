@@ -59,17 +59,30 @@ if ! command -v brew &> /dev/null; then
     export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
     export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
     export HOMEBREW_API_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api
-    if /bin/bash -c "$(curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install/raw/HEAD/install.sh)"; then
-        if [ -f "/opt/homebrew/bin/brew" ]; then
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        elif [ -f "/usr/local/bin/brew" ]; then
-            eval "$(/usr/local/bin/brew shellenv)"
-        fi
-        print_status "Homebrew 安装完成"
+    export HOMEBREW_INSTALL_FROM_API=1
+
+    # 从 TUNA 克隆 install 仓库（不支持 raw URL，需 git clone）
+    rm -rf /tmp/brew-install
+    if git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git /tmp/brew-install; then
+        /bin/bash /tmp/brew-install/install.sh
+        rm -rf /tmp/brew-install
     else
-        print_error "Homebrew 安装失败，请检查网络后重试"
+        print_error "Homebrew 安装脚本下载失败，请检查网络"
         exit 1
     fi
+
+    # 验证 brew 是否真正安装成功
+    if [ -f "/opt/homebrew/bin/brew" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f "/usr/local/bin/brew" ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+
+    if ! command -v brew &> /dev/null; then
+        print_error "Homebrew 安装失败，brew 命令不可用"
+        exit 1
+    fi
+    print_status "Homebrew 安装完成"
 else
     print_status "Homebrew 已安装，跳过"
 fi
