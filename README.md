@@ -22,7 +22,7 @@
   - pnpm (Node.js包管理器)
 - **AI工具**: ChatWise (AI聊天机器人), Spokenly (语音转文字AI工具)
 - **媒体工具**: IINA (视频播放器), QQ音乐 (音乐播放器)
-- **Shell增强**: Oh My Zsh (zsh配置框架), zsh-autosuggestions, zsh-syntax-highlighting
+- **Shell增强**: Oh My Zsh (zsh配置框架), Powerlevel10k (主题), zsh-autosuggestions, zsh-syntax-highlighting
 - **字体**: 霞鹜文楷字体 (开源中文字体)
 - **系统配置**: Finder 显示隐藏文件（开发必备）
 - **自动化维护**: 定时更新功能

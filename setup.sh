@@ -241,8 +241,25 @@ else
     print_status "Oh My Zsh 已安装，跳过"
 fi
 
-# 18a. 安装 zsh-autosuggestions 插件
+# 18a. 安装 Powerlevel10k 主题
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
+    run_command "安装 Powerlevel10k 主题" git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
+else
+    print_status "Powerlevel10k 主题已安装，跳过"
+fi
+
+# 18b. 配置 ZSH_THEME 为 powerlevel10k（幂等）
+if [ -f "$HOME/.zshrc" ]; then
+    if ! grep -q '^ZSH_THEME="powerlevel10k/powerlevel10k"' "$HOME/.zshrc"; then
+        sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+        print_status "ZSH_THEME 已设置为 powerlevel10k"
+    else
+        print_status "ZSH_THEME 已是 powerlevel10k，跳过"
+    fi
+fi
+
+# 18c. 安装 zsh-autosuggestions 插件
 if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
     run_command "安装 zsh-autosuggestions 插件" git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 else
