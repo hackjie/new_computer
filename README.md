@@ -5,7 +5,7 @@
 ## ✨ 功能特性
 
 ### 📦 包含的工具
-- **包管理器**: Homebrew (macOS包管理器，使用[国内镜像](https://gitee.com/cunkai/HomebrewCN)安装，阿里巴巴源加速)
+- **包管理器**: Homebrew (macOS包管理器，使用 [USTC 中科大镜像](https://mirrors.ustc.edu.cn/help/homebrew.html)全自动安装，阿里巴巴源加速 update/bottle)
 - **终端工具**: iTerm2 (高级终端应用)
 - **浏览器**: Google Chrome (现代浏览器)
 - **生产力工具**: Raycast (强大的启动器), Folo (信息浏览器)
@@ -27,7 +27,7 @@
 - **自动化维护**: 定时更新功能
 
 ### 🤖 智能特性
-- 🇨🇳 **国内加速**: Homebrew 使用国内镜像安装；配置阿里 `brew` / `homebrew-core` / `homebrew-cask` Git 远程与 bottle/API 环境变量，加速 `brew update` 与软件包下载
+- 🇨🇳 **国内加速**: Homebrew 使用 USTC 中科大镜像全自动安装（无 Gitee 排队），并配置阿里 `brew` / `homebrew-core` / `homebrew-cask` Git 远程与 bottle/API 环境变量，加速 `brew update` 与软件包下载
 - ✅ **智能检测**: 自动检测已安装的应用，跳过重复安装
 - 🔄 **自动更新**: 每天凌晨2点自动更新Homebrew和所有应用
 - 📝 **完整日志**: 详细的执行日志记录
@@ -150,6 +150,9 @@ fi
 
 **Q: 脚本执行失败？**
 A: 确保你有管理员权限，并且网络连接正常。
+
+**Q: 安装 Homebrew 时一直停在「Cloning into 'brew-install-ck' ... Waiting in queue」？**
+A: 此脚本已改用 [USTC 中科大镜像](https://mirrors.ustc.edu.cn/misc/brew-install.sh)安装，完全无交互、无 Gitee 排队。如旧脚本仍出现该提示，请拉取最新版本后重新运行。
 
 **Q: 某些应用安装失败？**
 A: 检查Homebrew是否正常，尝试手动安装：`brew install [应用名]`

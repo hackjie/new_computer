@@ -54,14 +54,16 @@ run_command() {
 # 1. 安装 Homebrew（使用国内镜像源）
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
-    echo "🔄 使用国内镜像安装 Homebrew（cunkai/HomebrewCN）..."
-    echo "⚠️  安装过程中需要交互操作：选择下载源和镜像源，推荐选择阿里巴巴源"
-    /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
-    if [ -f "/opt/homebrew/bin/brew" ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-        print_status "Homebrew 安装完成"
-    elif [ -f "/usr/local/bin/brew" ]; then
-        eval "$(/usr/local/bin/brew shellenv)"
+    echo "🔄 使用 USTC 中科大镜像安装 Homebrew（全程无交互、无 Gitee 排队）..."
+    export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.ustc.edu.cn/brew.git
+    export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.ustc.edu.cn/homebrew-core.git
+    export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+    if /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"; then
+        if [ -f "/opt/homebrew/bin/brew" ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -f "/usr/local/bin/brew" ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
         print_status "Homebrew 安装完成"
     else
         print_error "Homebrew 安装失败，请检查网络后重试"
