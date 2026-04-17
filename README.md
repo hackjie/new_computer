@@ -40,7 +40,7 @@
 ### 方式一：克隆并运行
 ```bash
 # 克隆仓库
-git clone https://github.com/lishouxian/new_computer.git
+git clone https://github.com/hackjie/new_computer.git
 cd new_computer
 
 # 运行安装脚本
