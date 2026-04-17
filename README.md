@@ -5,24 +5,29 @@
 ## ✨ 功能特性
 
 ### 📦 包含的工具
-- **包管理器**: Homebrew (macOS包管理器)
+- **包管理器**: Homebrew (macOS包管理器，使用[国内镜像](https://gitee.com/cunkai/HomebrewCN)安装，阿里巴巴源加速)
 - **终端工具**: iTerm2 (高级终端应用)
-- **浏览器**: Arc, Google Chrome (现代浏览器)
+- **浏览器**: Google Chrome (现代浏览器)
 - **生产力工具**: Raycast (强大的启动器), Folo (信息浏览器)
-- **笔记工具**: Obsidian (知识管理工具)
+- **笔记工具**: Obsidian (知识管理工具), MWeb Pro (Markdown 写作工具)
 - **开发工具**:
   - Visual Studio Code (代码编辑器)
   - Cursor (AI辅助代码编辑器)
-  - Zed (高性能代码编辑器)
+  - Android Studio (Android 开发 IDE)
+  - Figma (设计工具)
+  - SwitchHosts (Hosts 管理工具)
+  - yazi (终端文件管理器)
+  - Mole (系统清理与卸载)
   - uv (Python包管理器)
   - pnpm (Node.js包管理器)
 - **AI工具**: ChatWise (AI聊天机器人), Spokenly (语音转文字AI工具)
-- **媒体工具**: IINA (视频播放器), 网易云音乐 (音乐播放器)
-- **Shell增强**: Oh My Zsh (zsh配置框架)
+- **媒体工具**: IINA (视频播放器), QQ音乐 (音乐播放器)
+- **Shell增强**: Oh My Zsh (zsh配置框架), zsh-autosuggestions, zsh-syntax-highlighting
 - **字体**: 霞鹜文楷字体 (开源中文字体)
 - **自动化维护**: 定时更新功能
 
 ### 🤖 智能特性
+- 🇨🇳 **国内加速**: Homebrew 使用国内镜像安装，阿里巴巴源加速下载
 - ✅ **智能检测**: 自动检测已安装的应用，跳过重复安装
 - 🔄 **自动更新**: 每天凌晨2点自动更新Homebrew和所有应用
 - 📝 **完整日志**: 详细的执行日志记录
@@ -56,16 +61,17 @@ curl -fsSL https://raw.githubusercontent.com/lishouxian/new_computer/main/setup.
 |------|------|------|
 | 📦 包管理 | Homebrew | macOS包管理器 |
 | 🖥️ 终端 | iTerm2 | 高级终端应用 |
-| 🌐 浏览器 | Arc, Chrome | 现代浏览器 |
+| 🌐 浏览器 | Chrome | 现代浏览器 |
 | 🔍 生产力 | Raycast, Folo | 启动器和信息工具 |
-| 📝 笔记 | Obsidian | 知识管理工具 |
-| 💻 编辑器 | VS Code, Cursor, Zed | 代码编辑器 |
+| 📝 笔记 | Obsidian, MWeb Pro | 知识管理和 Markdown 写作 |
+| 💻 编辑器 | VS Code, Cursor | 代码编辑器 |
+| 🛠️ 开发 | Android Studio, Figma, SwitchHosts, yazi, Mole | IDE、设计、Hosts、终端文件管理、系统清理 |
 | 🤖 AI工具 | ChatWise, Spokenly | AI聊天和语音转文字 |
 | 🐍 Python | uv | 现代化Python包管理器 |
 | 📦 JavaScript | pnpm | Node.js包管理器 |
-| 🎬 媒体 | IINA, 网易云音乐 | 视频和音乐播放器 |
+| 🎬 媒体 | IINA, QQ音乐 | 视频和音乐播放器 |
 | 🔤 字体 | 霞鹜文楷 | 开源中文字体 |
-| 🔧 Shell | Oh My Zsh | zsh配置框架 |
+| 🔧 Shell | Oh My Zsh + 插件 | zsh 配置框架及自动补全、语法高亮 |
 | ⏰ 自动化 | 定时更新 | 自动维护脚本 |
 
 ## 🕐 定时更新功能
@@ -170,9 +176,10 @@ bash -x ./setup.sh
 
 ```
 new_computer/
-├── setup.sh           # 主安装脚本
-├── brew_update.sh     # 定时更新脚本
-└── README.md          # 项目说明
+├── setup.sh               # 主安装脚本
+├── brew_update.sh         # 定时更新脚本
+├── iterm2_profile.plist   # iTerm2 配置文件
+└── README.md              # 项目说明
 ```
 
 ## 📈 更新历史

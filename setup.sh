@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # macOS 开发环境一键安装脚本
-# 包含：Homebrew, iTerm2, Arc浏览器, Raycast, Obsidian, Chrome, VSCode, Cursor, Zed, ChatWise, IINA, 网易云音乐, uv, pnpm, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, 定时更新脚本
+# 包含：Homebrew, iTerm2, Chrome, Raycast, Obsidian, VSCode, Cursor, Android Studio, Figma, SwitchHosts, yazi, Mole, ChatWise, IINA, QQ音乐, uv, pnpm, Oh My Zsh, Folo, 霞鹜文楷字体, Spokenly, MWeb Pro, 定时更新脚本
 
 # 移除 set -e，让脚本在遇到错误时继续执行而不是退出
 
@@ -51,19 +51,48 @@ run_command() {
 # 基础工具安装
 # ===============================
 
-# 1. 安装 Homebrew
+# 1. 安装 Homebrew（使用国内镜像源）
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
-    if run_command "安装 Homebrew" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
-        # 添加 Homebrew 到 PATH
-        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+    echo "🔄 使用国内镜像安装 Homebrew（cunkai/HomebrewCN）..."
+    echo "⚠️  安装过程中需要交互操作：选择下载源和镜像源，推荐选择阿里巴巴源"
+    /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+    if [ -f "/opt/homebrew/bin/brew" ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
+        print_status "Homebrew 安装完成"
+    elif [ -f "/usr/local/bin/brew" ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+        print_status "Homebrew 安装完成"
+    else
+        print_error "Homebrew 安装失败，请检查网络后重试"
+        exit 1
     fi
 else
     print_status "Homebrew 已安装，跳过"
 fi
 
-# 2. 更新 Homebrew
+# 2. 配置 Homebrew 阿里巴巴国内镜像源
+echo "🔄 配置 Homebrew 阿里巴巴国内镜像源..."
+BREW_MIRROR_PROFILE="${HOME}/.zprofile"
+touch "$BREW_MIRROR_PROFILE"
+
+# 清除旧的镜像配置（避免重复）
+sed -i '' '/HOMEBREW_BOTTLE_DOMAIN/d' "$BREW_MIRROR_PROFILE"
+sed -i '' '/HOMEBREW_API_DOMAIN/d' "$BREW_MIRROR_PROFILE"
+sed -i '' '/HOMEBREW_PIP_INDEX_URL/d' "$BREW_MIRROR_PROFILE"
+
+# 写入阿里巴巴镜像源
+echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles' >> "$BREW_MIRROR_PROFILE"
+echo 'export HOMEBREW_API_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles/api' >> "$BREW_MIRROR_PROFILE"
+echo 'export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple' >> "$BREW_MIRROR_PROFILE"
+
+# 当前会话立即生效
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles
+export HOMEBREW_API_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles/api
+export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple
+print_status "阿里巴巴镜像源配置完成"
+
+# 3. 更新 Homebrew
 run_command "更新 Homebrew" brew update
 
 # ===============================
@@ -81,14 +110,7 @@ fi
 # 浏览器
 # ===============================
 
-# 4. 安装 Arc 浏览器
-if ! brew list --cask 2>/dev/null | grep -q arc; then
-    run_command "安装 Arc 浏览器" brew install --cask arc
-else
-    print_status "Arc 浏览器已安装，跳过"
-fi
-
-# 5. 安装 Google Chrome
+# 4. 安装 Google Chrome
 if ! brew list --cask 2>/dev/null | grep -q google-chrome; then
     run_command "安装 Google Chrome" brew install --cask google-chrome
 else
@@ -124,6 +146,13 @@ else
     print_status "Obsidian 已安装，跳过"
 fi
 
+# 9. 安装 MWeb Pro
+if ! brew list --cask 2>/dev/null | grep -q mweb-pro; then
+    run_command "安装 MWeb Pro" brew install --cask mweb-pro
+else
+    print_status "MWeb Pro 已安装，跳过"
+fi
+
 # ===============================
 # 开发工具
 # ===============================
@@ -142,11 +171,39 @@ else
     print_status "Cursor 已安装，跳过"
 fi
 
-# 11. 安装 Zed
-if ! brew list --cask 2>/dev/null | grep -q zed; then
-    run_command "安装 Zed" brew install --cask zed
+# 11. 安装 Android Studio
+if ! brew list --cask 2>/dev/null | grep -q android-studio; then
+    run_command "安装 Android Studio" brew install --cask android-studio
 else
-    print_status "Zed 已安装，跳过"
+    print_status "Android Studio 已安装，跳过"
+fi
+
+# 12. 安装 Figma
+if ! brew list --cask 2>/dev/null | grep -q figma; then
+    run_command "安装 Figma" brew install --cask figma
+else
+    print_status "Figma 已安装，跳过"
+fi
+
+# 13. 安装 SwitchHosts
+if ! brew list --cask 2>/dev/null | grep -q switchhosts; then
+    run_command "安装 SwitchHosts" brew install --cask switchhosts
+else
+    print_status "SwitchHosts 已安装，跳过"
+fi
+
+# 14. 安装 yazi（终端文件管理器）
+if ! command -v yazi &> /dev/null; then
+    run_command "安装 yazi" brew install yazi
+else
+    print_status "yazi 已安装，跳过"
+fi
+
+# 15. 安装 Mole（系统清理与卸载工具）
+if ! command -v mole &> /dev/null; then
+    run_command "安装 Mole" brew install mole
+else
+    print_status "Mole 已安装，跳过"
 fi
 
 # ===============================
@@ -178,11 +235,11 @@ else
     print_status "IINA 播放器已安装，跳过"
 fi
 
-# 15. 安装 网易云音乐
-if ! brew list --cask 2>/dev/null | grep -q neteasemusic; then
-    run_command "安装 网易云音乐" brew install --cask neteasemusic
+# 15. 安装 QQ音乐
+if ! brew list --cask 2>/dev/null | grep -q qqmusic; then
+    run_command "安装 QQ音乐" brew install --cask qqmusic
 else
-    print_status "网易云音乐已安装，跳过"
+    print_status "QQ音乐已安装，跳过"
 fi
 
 # ===============================
@@ -212,6 +269,45 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     run_command "安装 Oh My Zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
     print_status "Oh My Zsh 已安装，跳过"
+fi
+
+# 18a. 安装 zsh-autosuggestions 插件
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+    run_command "安装 zsh-autosuggestions 插件" git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+else
+    print_status "zsh-autosuggestions 插件已安装，跳过"
+fi
+
+# 18b. 安装 zsh-syntax-highlighting 插件
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+    run_command "安装 zsh-syntax-highlighting 插件" git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+else
+    print_status "zsh-syntax-highlighting 插件已安装，跳过"
+fi
+
+# 18c. 配置 Oh My Zsh 插件
+if [ -f "$HOME/.zshrc" ]; then
+    if grep -q "^plugins=(" "$HOME/.zshrc"; then
+        sed -i '' '/^plugins=(/,/)/c\
+plugins=(\
+  git\
+  zsh-autosuggestions\
+  zsh-syntax-highlighting\
+  z\
+)' "$HOME/.zshrc"
+        print_status "Oh My Zsh 插件配置已更新"
+    fi
+fi
+
+# 18d. 导入 iTerm2 配置
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ITERM2_PROFILE="$SCRIPT_DIR/iterm2_profile.plist"
+if [ -f "$ITERM2_PROFILE" ]; then
+    cp "$ITERM2_PROFILE" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+    print_status "iTerm2 配置已导入"
+else
+    print_warning "未找到 iTerm2 配置文件，跳过导入"
 fi
 
 # ===============================
@@ -244,7 +340,6 @@ echo "🖥️ 终端工具:"
 echo "  • iTerm2 (终端)"
 echo ""
 echo "🌐 浏览器:"
-echo "  • Arc (浏览器)"
 echo "  • Google Chrome (浏览器)"
 echo ""
 echo "🔍 生产力工具:"
@@ -253,11 +348,16 @@ echo "  • Folo (信息浏览器)"
 echo ""
 echo "📝 笔记和知识管理:"
 echo "  • Obsidian (笔记应用)"
+echo "  • MWeb Pro (Markdown 写作工具)"
 echo ""
 echo "💻 开发工具:"
 echo "  • Visual Studio Code (代码编辑器)"
 echo "  • Cursor (AI 代码编辑器)"
-echo "  • Zed (高性能代码编辑器)"
+echo "  • Android Studio (Android 开发 IDE)"
+echo "  • Figma (设计工具)"
+echo "  • SwitchHosts (Hosts 管理工具)"
+echo "  • yazi (终端文件管理器)"
+echo "  • Mole (系统清理与卸载)"
 echo ""
 echo "🤖 AI工具:"
 echo "  • ChatWise (AI 聊天机器人)"
@@ -265,7 +365,7 @@ echo "  • Spokenly (语音转文字AI工具)"
 echo ""
 echo "🎬 媒体工具:"
 echo "  • IINA (视频播放器)"
-echo "  • 网易云音乐 (音乐播放器)"
+echo "  • QQ音乐 (音乐播放器)"
 echo ""
 echo "🔧 开发环境:"
 echo "  • uv (Python 包管理器)"
@@ -273,6 +373,8 @@ echo "  • pnpm (Node.js 包管理器)"
 echo ""
 echo "🐚 Shell增强:"
 echo "  • Oh My Zsh (zsh 配置框架)"
+echo "  • zsh-autosuggestions (命令自动补全)"
+echo "  • zsh-syntax-highlighting (语法高亮)"
 echo ""
 echo "🔤 字体:"
 echo "  • 霞鹜文楷字体 (开源中文字体)"
