@@ -51,87 +51,18 @@ run_command() {
 # 基础工具安装
 # ===============================
 
-# 1. 安装 Homebrew（使用国内镜像源）
+# 1. 安装 Homebrew
 echo "📦 正在检查 Homebrew..."
 if ! command -v brew &> /dev/null; then
-    echo "🔄 使用清华 TUNA 镜像安装 Homebrew（全程无交互、无排队）..."
-    export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
-    export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
-    export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
-    export HOMEBREW_API_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api
-    export HOMEBREW_INSTALL_FROM_API=1
-
-    # 从 TUNA 克隆 install 仓库（不支持 raw URL，需 git clone）
-    rm -rf /tmp/brew-install
-    if git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git /tmp/brew-install; then
-        /bin/bash /tmp/brew-install/install.sh
-        rm -rf /tmp/brew-install
-    else
-        print_error "Homebrew 安装脚本下载失败，请检查网络"
-        exit 1
-    fi
-
-    # 验证 brew 是否真正安装成功
-    if [ -f "/opt/homebrew/bin/brew" ]; then
+    if run_command "安装 Homebrew" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
         eval "$(/opt/homebrew/bin/brew shellenv)"
-    elif [ -f "/usr/local/bin/brew" ]; then
-        eval "$(/usr/local/bin/brew shellenv)"
     fi
-
-    if ! command -v brew &> /dev/null; then
-        print_error "Homebrew 安装失败，brew 命令不可用"
-        exit 1
-    fi
-    print_status "Homebrew 安装完成"
 else
     print_status "Homebrew 已安装，跳过"
 fi
 
-# 确保当前 shell 能正确解析 brew 路径（新终端一般已在 PATH，此处兜底）
-if command -v brew &> /dev/null; then
-    eval "$(brew shellenv)" 2>/dev/null || true
-fi
-
-# 2. 配置 Homebrew 阿里巴巴国内镜像源
-echo "🔄 配置 Homebrew 阿里巴巴国内镜像源..."
-BREW_MIRROR_PROFILE="${HOME}/.zprofile"
-touch "$BREW_MIRROR_PROFILE"
-
-# 清除旧的镜像配置（避免重复）
-sed -i '' '/HOMEBREW_BOTTLE_DOMAIN/d' "$BREW_MIRROR_PROFILE"
-sed -i '' '/HOMEBREW_API_DOMAIN/d' "$BREW_MIRROR_PROFILE"
-sed -i '' '/HOMEBREW_PIP_INDEX_URL/d' "$BREW_MIRROR_PROFILE"
-
-# 写入阿里巴巴镜像源
-echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles' >> "$BREW_MIRROR_PROFILE"
-echo 'export HOMEBREW_API_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles/api' >> "$BREW_MIRROR_PROFILE"
-echo 'export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple' >> "$BREW_MIRROR_PROFILE"
-
-# 当前会话立即生效
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles
-export HOMEBREW_API_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles/api
-export HOMEBREW_PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple
-
-# Git 远程改为阿里源：加速 brew update（拉取 brew、core、cask 公式库）
-# 说明：仅设置 BOTTLE/API 环境变量不会改 git origin；不执行则 update 仍走 GitHub
-if command -v brew &> /dev/null; then
-    BREW_GIT_DIR="$(brew --repo 2>/dev/null)"
-    if [ -n "$BREW_GIT_DIR" ] && [ -d "$BREW_GIT_DIR/.git" ]; then
-        run_command "将 brew.git 远程设为阿里源" git -C "$BREW_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
-    fi
-    CORE_GIT_DIR="$(brew --repo homebrew/core 2>/dev/null)"
-    if [ -n "$CORE_GIT_DIR" ] && [ -d "$CORE_GIT_DIR/.git" ]; then
-        run_command "将 homebrew-core 远程设为阿里源" git -C "$CORE_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-core.git
-    fi
-    CASK_GIT_DIR="$(brew --repo homebrew/cask 2>/dev/null)"
-    if [ -n "$CASK_GIT_DIR" ] && [ -d "$CASK_GIT_DIR/.git" ]; then
-        run_command "将 homebrew-cask 远程设为阿里源" git -C "$CASK_GIT_DIR" remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-cask.git
-    fi
-fi
-
-print_status "阿里巴巴镜像源配置完成"
-
-# 3. 更新 Homebrew
+# 2. 更新 Homebrew
 run_command "更新 Homebrew" brew update
 
 # ===============================
