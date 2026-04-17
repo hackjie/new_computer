@@ -256,9 +256,18 @@ else
     print_status "zsh-syntax-highlighting 插件已安装，跳过"
 fi
 
-# 18c. 配置 Oh My Zsh 插件
-if [ -f "$HOME/.zshrc" ]; then
-    if grep -q "^plugins=(" "$HOME/.zshrc"; then
+# 18c. 配置 Oh My Zsh 插件（幂等：检查插件列表是否已包含所需插件，不重复写入）
+DESIRED_PLUGINS="git zsh-autosuggestions zsh-syntax-highlighting z"
+if [ -f "$HOME/.zshrc" ] && grep -q "^plugins=(" "$HOME/.zshrc"; then
+    CURRENT_PLUGINS=$(grep -A 10 "^plugins=(" "$HOME/.zshrc" | tr -d '[:space:]')
+    NEED_UPDATE=false
+    for plugin in $DESIRED_PLUGINS; do
+        if ! echo "$CURRENT_PLUGINS" | grep -q "$plugin"; then
+            NEED_UPDATE=true
+            break
+        fi
+    done
+    if [ "$NEED_UPDATE" = true ]; then
         sed -i '' '/^plugins=(/,/)/c\
 plugins=(\
   git\
@@ -267,17 +276,39 @@ plugins=(\
   z\
 )' "$HOME/.zshrc"
         print_status "Oh My Zsh 插件配置已更新"
+    else
+        print_status "Oh My Zsh 插件已包含所需配置，跳过"
     fi
 fi
 
-# 18d. 导入 iTerm2 配置
+# 18d. 导入 iTerm2 配置（幂等：仅首次导入，避免覆盖用户后续自定义）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ITERM2_PROFILE="$SCRIPT_DIR/iterm2_profile.plist"
+ITERM2_DEST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 if [ -f "$ITERM2_PROFILE" ]; then
-    cp "$ITERM2_PROFILE" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-    print_status "iTerm2 配置已导入"
+    if [ ! -f "$ITERM2_DEST" ]; then
+        cp "$ITERM2_PROFILE" "$ITERM2_DEST"
+        print_status "iTerm2 配置已导入"
+    else
+        print_status "iTerm2 配置已存在，跳过（避免覆盖用户自定义）"
+    fi
 else
     print_warning "未找到 iTerm2 配置文件，跳过导入"
+fi
+
+# ===============================
+# 系统偏好设置
+# ===============================
+
+# 显示 Finder 隐藏文件（幂等：检查当前值，避免不必要地重启 Finder）
+echo "🔄 配置 Finder 显示隐藏文件..."
+CURRENT_SHOW_ALL=$(defaults read com.apple.finder AppleShowAllFiles 2>/dev/null || echo "0")
+if [ "$CURRENT_SHOW_ALL" != "1" ] && [ "$CURRENT_SHOW_ALL" != "YES" ] && [ "$CURRENT_SHOW_ALL" != "true" ]; then
+    defaults write com.apple.finder AppleShowAllFiles -bool true
+    killall Finder 2>/dev/null || true
+    print_status "Finder 已设置为显示隐藏文件"
+else
+    print_status "Finder 已是显示隐藏文件状态，跳过"
 fi
 
 # ===============================
@@ -348,6 +379,9 @@ echo "  • zsh-syntax-highlighting (语法高亮)"
 echo ""
 echo "🔤 字体:"
 echo "  • 霞鹜文楷字体 (开源中文字体)"
+echo ""
+echo "⚙️ 系统配置:"
+echo "  • Finder 显示隐藏文件 (默认开启)"
 echo ""
 echo "⏰ 自动化:"
 echo "  • 定时更新脚本 (每天凌晨2点自动更新)"
