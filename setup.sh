@@ -281,21 +281,6 @@ plugins=(\
     fi
 fi
 
-# 18d. 导入 iTerm2 配置（幂等：仅首次导入，避免覆盖用户后续自定义）
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ITERM2_PROFILE="$SCRIPT_DIR/iterm2_profile.plist"
-ITERM2_DEST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-if [ -f "$ITERM2_PROFILE" ]; then
-    if [ ! -f "$ITERM2_DEST" ]; then
-        cp "$ITERM2_PROFILE" "$ITERM2_DEST"
-        print_status "iTerm2 配置已导入"
-    else
-        print_status "iTerm2 配置已存在，跳过（避免覆盖用户自定义）"
-    fi
-else
-    print_warning "未找到 iTerm2 配置文件，跳过导入"
-fi
-
 # ===============================
 # 系统偏好设置
 # ===============================

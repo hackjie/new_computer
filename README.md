@@ -171,10 +171,9 @@ bash -x ./setup.sh
 
 ```
 new_computer/
-├── setup.sh               # 主安装脚本
-├── brew_update.sh         # 定时更新脚本
-├── iterm2_profile.plist   # iTerm2 配置文件
-└── README.md              # 项目说明
+├── setup.sh           # 主安装脚本
+├── brew_update.sh     # 定时更新脚本
+└── README.md          # 项目说明
 ```
 
 ## 📈 更新历史
